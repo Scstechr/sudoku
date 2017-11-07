@@ -1,7 +1,7 @@
 #ifndef SUDOKU_Q_H
 #define SUDOKU_Q_H
 
-void SudokuQuestion(Sudoku *sudoku){
+void QueSudoku(Sudoku *sudoku){
   int temp0[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
   int temp1[9] = {0, 0, 0, 0, 0, 0, 0, 2, 7};
   int temp2[9] = {4, 0, 0, 6, 0, 8, 0, 0, 0};
