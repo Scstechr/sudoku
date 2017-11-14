@@ -1,0 +1,5 @@
+version01
+・適当な解答 (未完成)
+
+version02
+・functionディレクトリの利用
