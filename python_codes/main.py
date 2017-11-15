@@ -5,7 +5,9 @@ from sudoku import *
 def main():
     # changing directry and question based on input
     path = sys.argv[1]
-    filename = f'{sys.argv[1]}/{sys.argv[2]}'
+    name = sys.argv[2]
+    level = name[name.find('.')-1:name.find('.')]
+    filename = f'../qs/level{level}/{name}'
     os.chdir(path)
 
     #input

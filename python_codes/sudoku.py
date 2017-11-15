@@ -1,12 +1,28 @@
-import sys
-import os
-
 def UpdateOffset(num, offset):
     if num == 0:
         offset = 0
     elif num > 0 and num%3 == 0:
         offset += 1
     return offset
+
+def SquarePro(index, check, num, offset):
+    rset = set()
+    if index < 3:
+        if num != 0:
+            check['s'][3*offset].update(num)
+        else:
+            rset = check['s'][3*offset]
+    elif index < 6:
+        if num != 0:
+            check['s'][3*offset+1].update(num)
+        else:
+            rset = check['s'][3*offset+1]
+    else:
+        if num != 0:
+            check['s'][3*offset+2].update(num)
+        else:
+            rset = check['s'][3*offset+2]
+    return rset
 
 def PrintSudoku(sudoku):
     offset = 0
@@ -45,12 +61,7 @@ def InputSudoku(filename):
                 if num != '0':
                     row.update(num)
                     check['c'][string.index(num)].update(num)
-                    if string.index(num) < 3:
-                        check['s'][3*offset].update(num)
-                    elif string.index(num) < 6:
-                        check['s'][3*offset+1].update(num)
-                    else:
-                        check['s'][3*offset+2].update(num)
+                    SquarePro(string.index(num), check, num, offset)
             check['r'].append(row)
             sudoku.append(string)
             row_count += 1
@@ -72,50 +83,15 @@ def CheckSudoku(sudoku, check):
         for num in lst:
             if num == '0':
                 eset = check['r'][sudoku.index(lst)].union(check['c'][col_count])
-                if col_count < 3:
-                    eset = eset.union(check['s'][3*offset])
-                elif col_count < 6:
-                    eset = eset.union(check['s'][3*offset+1])
-                else:
-                    eset = eset.union(check['s'][3*offset+2])
+                eset = eset.union(SquarePro(col_count, check, 0, offset))
                 eset = full.difference(eset)
                 if len(eset) == 1:
                     string = repr(eset)[2:-2]
                     sudoku[sudoku.index(lst)][col_count] = string
                     check['r'][sudoku.index(lst)].update(string)
                     check['c'][col_count].update(string)
-                    if col_count < 3:
-                        check['s'][3*offset].update(string)
-                    elif col_count < 6:
-                        check['s'][3*offset+1].update(string)
-                    else:
-                        check['s'][3*offset+2].update(string)
+                    SquarePro(col_count, check, string, offset)
                 else:
                     wlist.append('a')
             col_count += 1
     return len(wlist)
-
-def main():
-    # changing directry and question based on input
-    path = sys.argv[1]
-    filename = f'{sys.argv[1]}/{sys.argv[2]}'
-    os.chdir(path)
-
-    #input
-    sudoku = InputSudoku(filename)
-    check = sudoku.pop()
-    sudoku = sudoku.pop()
-    previous = 81
-    while(1):
-        present = CheckSudoku(sudoku, check)
-        if present == 0 or present == previous:
-            PrintSudoku(sudoku)
-            if(present!=0):
-                 print(present)
-            break
-        else:
-            previous = present
-
-
-if __name__ == '__main__':
-    main()
