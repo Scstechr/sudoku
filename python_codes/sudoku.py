@@ -5,7 +5,7 @@ def UpdateOffset(num, offset):
         offset += 1
     return offset
 
-def SquarePro(index, check, num, offset):
+def CellPro(index, check, num, offset):
     rset = set()
     if index < 3:
         if num != 0:
@@ -47,12 +47,9 @@ def InputSudoku(filename):
         check['c'] = [] # columns
         check['s'] = [] # squares
         for i in range(9):
-            column = set()
-            square = set()
-            check['c'].append(column)
-            check['s'].append(square)
-        row_count = 0
-        offset = 0
+            check['c'].append(set())
+            check['s'].append(set())
+        row_count, offset = 0, 0
         for line in f:
             offset = UpdateOffset(row_count, offset)
             string = line.split()
@@ -61,11 +58,10 @@ def InputSudoku(filename):
                 if num != '0':
                     row.update(num)
                     check['c'][string.index(num)].update(num)
-                    SquarePro(string.index(num), check, num, offset)
+                    CellPro(string.index(num), check, num, offset)
             check['r'].append(row)
             sudoku.append(string)
             row_count += 1
-
     rlist.append(sudoku)
     rlist.append(check)
     return rlist
@@ -83,14 +79,15 @@ def CheckSudoku(sudoku, check):
         for num in lst:
             if num == '0':
                 eset = check['r'][sudoku.index(lst)].union(check['c'][col_count])
-                eset = eset.union(SquarePro(col_count, check, 0, offset))
+                eset = eset.union(CellPro(col_count, check, 0, offset))
+                # fill in here
                 eset = full.difference(eset)
                 if len(eset) == 1:
                     string = repr(eset)[2:-2]
                     sudoku[sudoku.index(lst)][col_count] = string
                     check['r'][sudoku.index(lst)].update(string)
                     check['c'][col_count].update(string)
-                    SquarePro(col_count, check, string, offset)
+                    CellPro(col_count, check, string, offset)
                 else:
                     wlist.append('a')
             col_count += 1
