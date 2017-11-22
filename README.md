@@ -1,7 +1,7 @@
 # sudoku
 
 ### Purpose
-Implement sudoku solver with many programming languages.
+Implement sudoku solver with several programming languages.
 
 ### Goal
 _"fill-able" cell meaning cell that has only one possibility of digit to fill._
